@@ -45,9 +45,7 @@
   p {
     margin: 0;
   }
-  
-  /* Todo Container */
-  
+    
   .todo {
     display: flex;
     flex-direction: column;

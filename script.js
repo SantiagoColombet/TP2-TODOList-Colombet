@@ -42,20 +42,30 @@ document.getElementById("deleteButton").addEventListener("click", () =>{
     scrollContainer.innerHTML = " "
 })
 
-document.getElementById("minTarea").addEventListener("click", () =>
-{
-    arrayAux = []
-    if(array.length != 0)
-    {
-        let fechaAux = new Date()
+document.getElementById("minTarea").addEventListener("click", () => {
+    let arrayAux = [];
+
+    if (array.length !== 0) {
         array.forEach(element => {
-            arrayAux.push(fechaAux - element.fechaCreacion)
+            if (element.fechaTachado !== 0) { 
+                arrayAux.push(element.fechaTachado - element.fechaCreacion);
+            } else {
+                arrayAux.push(Infinity); 
+            }
         });
+
         let minimo = Math.min(...arrayAux);
-        let id = arrayAux.indexOf(minimo)
-        console.log(arrayAux)
+
+        if (minimo !== Infinity) { 
+            let id = arrayAux.indexOf(minimo);
+            let tareaMin = array[id]; 
+            console.log(`La tarea que menos tardó en tacharse es: "${tareaMin.nombre}", con un tiempo de ${minimo} ms.`);
+        } else {
+            console.log("No hay tareas tachadas.");
+        }
     }
-})
+});
+
 
 function tacharTarea(id) {
     let checkbox = document.getElementById(id);
@@ -63,8 +73,11 @@ function tacharTarea(id) {
 
     if (checkbox.checked) {
         tarea.classList.add('disabled');
-        array.find(element => element.id === id).fechaTachado = new Date();
+        let tareaObj = array.find(element => element.id === id);
+        tareaObj.fechaTachado = new Date(); 
+    } else {
         tarea.classList.remove('disabled');
-        array.find(element => element.id === id).fechaTachado = 0;
+        let tareaObj = array.find(element => element.id === id);
+        tareaObj.fechaTachado = 0;
     }
 }
